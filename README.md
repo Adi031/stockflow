@@ -21,6 +21,25 @@ docker compose up --build
 Local dev without Docker for the app: start `postgres` and `redis` via compose, then
 `cd backend && mvn spring-boot:run` and `cd frontend && npm install && npm run dev`.
 
+## Demo data
+
+Docker Compose starts the backend with `SEED_ENABLED=true`, so the first boot loads sample data
+(`DataSeeder`). It skips itself if any user already exists. All accounts use password **`Password123!`**.
+
+| Role | Login |
+|---|---|
+| Admin | admin@stockflow.dev |
+| Sellers (TechNest, UrbanThreads, HomeHaven) | seller1@stockflow.dev … seller3@stockflow.dev |
+| Customers | customer1@stockflow.dev … customer10@stockflow.dev |
+
+Also seeded: 24 products plus one flash-sale item, with varied stock (some low, one out of stock),
+six real checkouts in different states (confirmed, shipped, delivered, cancelled), and a live
+5-unit flash sale — its ID is printed in the backend log (`Flash sale #N is live`).
+
+Re-seed from scratch: `docker compose down -v && docker compose up --build`.
+Running without Docker: set `SEED_ENABLED=true` in the backend's environment.
+Turn it off by removing that variable from `docker-compose.yml`.
+
 ## Demo script (5 minutes)
 
 1. Register a **Seller** → open a store → create a product with stock **10**.
