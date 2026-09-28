@@ -1,0 +1,56 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: stockflow
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:stockflow}
+    username: ${DB_USER:stockflow}
+    password: ${DB_PASSWORD:stockflow}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc.batch_size: 30
+        format_sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  cache:
+    type: redis
+
+jwt:
+  secret: ${JWT_SECRET:stockflow-dev-secret-change-me-please-32bytes-min}
+  access-token-ttl-ms: 900000        # 15 min
+  refresh-token-ttl-ms: 604800000    # 7 days
+
+stockflow:
+  seed:
+    enabled: ${SEED_ENABLED:true}
+    reservation:
+      ttl-minutes: 10
+  reservation:
+    ttl-minutes: 10
+  scheduler:
+    reservation-sweep-fixed-rate-ms: 15000
+    payment-reconciliation-fixed-rate-ms: 20000
+  payment:
+    simulated-latency-ms: 500
+    failure-rate: 0.15
+    timeout-rate: 0.05
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    com.stockflow: INFO
